@@ -52,3 +52,4 @@ animate_ts(ndvi, title = "NDVI Trends") |>
 
 ---
 
+"# animategee" 
