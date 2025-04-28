@@ -1,0 +1,86 @@
+---
+title: "Aral Sea Shrinkage Animation (2007-2020)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Aral Sea Animation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = FALSE,  # Prevents execution during package build
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+## Introduction
+This vignette demonstrates how to create an animation of the Aral Sea's shrinkage  (2007-2020) using MODIS data from Google Earth Engine.
+
+## Setup
+```{r setup-pkgs, eval=FALSE}
+library(animategee)
+library(sf)
+library(rgee)
+```
+
+## Step 1: Initialize GEE
+```{r init-gee, eval=FALSE}
+gee_init()  # Authenticate and initialize (requires GEE account)
+rgee::ee_check() # Verify installation
+```
+
+## Step 2: Define Region of Interest
+```{r define-region, eval=FALSE}
+aral_sea<- st_as_sfc(
+  "POLYGON ((58 46.5, 61 46.5, 61 44, 58 44, 58 46.5))", 
+  crs = 4326
+)
+```
+
+## Step 3: Fetch NDWI Data (Water Index)
+```{r fetch-data, eval=FALSE}
+ndwi_data <- fetch_ts(
+  collection = "MODIS/006/MOD09A1",  # Surface reflectance
+  band = "NDWI",                     # Normalized Difference Water Index
+  region = aral_sea,
+  dates = c("2007-01-01", "2020-12-31"),
+  scale = 500,                       # 500m resolution
+  reducer = "median"                 # Reduce cloud effects
+)
+```
+
+## Step 4: Create Animation
+```{r animate, eval=FALSE}
+animate_gif(
+  df = ndwi_data,
+  output_file = "aral_sea_shrinkage.gif",
+  y_col = "NDWI",
+  title = "Aral Sea Water Loss (2007-2020)",
+  fps = 8,                           # Frames per second
+  color = "blues"                    # Color scale for water
+)
+```
+
+## Interpretation
+- NDWI > 0.2: Water presence (blue colors)
+- NDWI < 0: Land
+- **Declining values**: Water loss
+- The animation will show:
+  - Rapid shrinkage from 2007-2010
+  - Eastern basin dries completely
+  - Complete separation into North/South basins by 2015
+  
+## Complete Script
+For immediate use:
+```{r complete-script, eval=FALSE}
+library(animategee)
+gee_init()
+aral_sea <- st_as_sfc("POLYGON ((58 46.5, 61 46.5, 61 44, 58 44, 58 46.5))")
+ndwi_data <- fetch_ts("MODIS/006/MOD09A1", "NDWI", aral_sea, 
+                     c("2007-01-01", "2020-12-31"), scale = 500)
+animate_gif(ndwi_data, "aral_sea.gif", y_col = "NDWI", 
+           title = "Aral Sea Shrinkage", fps = 8, color = "blues")
+```

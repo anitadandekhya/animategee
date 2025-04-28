@@ -1,0 +1,23 @@
+Package: animategee
+Title: Time Series Animation from Google Earth Engine
+Version: 0.1.0
+Authors@R: 
+    person("Anita", "Dandekhya", email= "anita.dandekhya@gmail.com", role = c("aut", "cre"))
+Description: AnimateGEE provides an R interface to fetch, process, and animate time-series data (e.g., NDVI, Land Surface Temperature, Urban Expansion) from Google Earth Engine directly in R. It simplifies the workflow of generating animated GIFs or interactive visualizations without requiring JavaScript (GEE's native language).
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    rgee,
+    sf,
+    gganimate,
+    ggplot2,
+    rlang,
+    htmlwidgets
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
