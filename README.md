@@ -1,7 +1,7 @@
 
 # animategee
 
-An R package for creating professional animations from Google Earth Engine time-series data with minimal code.
+An R package for creating animations from Google Earth Engine time-series data with minimal code.
 
 ## Installation
 
